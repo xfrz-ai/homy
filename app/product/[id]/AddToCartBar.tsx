@@ -3,11 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './AddToCartBar.module.css';
+import { useCart } from '../../../context/CartContext';
+import { useRouter } from 'next/navigation';
 
-export default function AddToCartBar() {
+interface AddToCartBarProps {
+  product: {
+    id: string;
+    name: string;
+    price: string;
+    image: string;
+  };
+}
+
+export default function AddToCartBar({ product }: AddToCartBarProps) {
   const [qty, setQty] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { addToCart } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -22,6 +35,7 @@ export default function AddToCartBar() {
   };
 
   const handleAddToCart = () => {
+    addToCart(product, qty);
     setShowPopup(true);
   };
 
@@ -57,7 +71,7 @@ export default function AddToCartBar() {
             <p className={styles.successText}>
               Your items succesful added.<br />continue shopping or go to cart to<br />view your shopping list
             </p>
-            <button className={styles.viewCartBtn} onClick={closePopup}>
+            <button className={styles.viewCartBtn} onClick={() => { closePopup(); router.push('/cart'); }}>
               View Cart
             </button>
           </div>

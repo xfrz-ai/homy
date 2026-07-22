@@ -67,9 +67,9 @@ export default function Home() {
           <i className="ph ph-house"></i>
           <span className="nav-label">Home</span>
         </a>
-        <a href="#" className="nav-item">
+        <Link href="/cart" className="nav-item">
           <i className="ph ph-shopping-cart"></i>
-        </a>
+        </Link>
         <a href="#" className="nav-item">
           <i className="ph ph-heart"></i>
         </a>

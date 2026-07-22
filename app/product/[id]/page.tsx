@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import styles from './page.module.css';
 import { getProductById } from '../../../lib/products';
 import AddToCartBar from './AddToCartBar';
+import CartButton from '../../../components/CartButton';
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -22,9 +23,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
           <Link href="/" className={styles.backBtn}>
             <i className="ph ph-arrow-left"></i> Back
           </Link>
-          <button className={styles.cartBtn}>
-            <i className="ph ph-shopping-cart"></i> 0
-          </button>
+          <CartButton className={styles.cartBtn} />
         </header>
 
         {/* Product Info */}
@@ -54,7 +53,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
           </p>
         </div>
 
-        <AddToCartBar />
+        <AddToCartBar product={product} />
       </div>
     </div>
   );
