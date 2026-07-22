@@ -1,0 +1,159 @@
+.actionBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #F0F0F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 24px;
+  z-index: 10;
+}
+
+.qtySelector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 120px;
+  border: 1px solid #E0E0E0;
+  border-radius: 24px;
+  padding: 8px 12px;
+}
+
+.qtyBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #1C2730;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qtyValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1C2730;
+}
+
+.addToCart {
+  background-color: #1C2730;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  flex: 1;
+  margin-left: 16px;
+}
+
+/* Popup Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end; /* Align bottom sheet to bottom */
+  justify-content: center;
+}
+
+.popup {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 414px; /* Match mobile wrapper width */
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 24px 20px 32px;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.closeBtn {
+  position: absolute;
+  top: -48px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background-color: #1C2730;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Fallback if closeBtn is placed inside popup body instead of hovering above */
+.closeBtnInner {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  background-color: #2D3748;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+.illustration {
+  width: 100%;
+  max-width: 300px;
+  margin: 20px 0;
+}
+
+.successTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.successText {
+  font-size: 14px;
+  color: #4A5568;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  padding: 0 12px;
+}
+
+.viewCartBtn {
+  width: 100%;
+  background-color: #1C2730;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
