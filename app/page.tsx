@@ -70,12 +70,12 @@ export default function Home() {
         <Link href="/cart" className="nav-item">
           <i className="ph ph-shopping-cart"></i>
         </Link>
-        <a href="#" className="nav-item">
+        <Link href="/wishlist" className="nav-item">
           <i className="ph ph-heart"></i>
-        </a>
-        <a href="#" className="nav-item">
+        </Link>
+        <Link href="/profile" className="nav-item">
           <i className="ph ph-user"></i>
-        </a>
+        </Link>
       </nav>
     </div>
   );

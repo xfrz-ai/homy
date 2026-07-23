@@ -5,6 +5,7 @@ import styles from './page.module.css';
 import { getProductById } from '../../../lib/products';
 import AddToCartBar from './AddToCartBar';
 import CartButton from '../../../components/CartButton';
+import WishlistButton from './WishlistButton';
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -30,7 +31,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         <div className={styles.productInfo}>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{product.name}</h1>
-            <i className={`ph ph-heart ${styles.heartIcon}`}></i>
+            <WishlistButton product={product} />
           </div>
           <p className={styles.price}>{product.price}</p>
         </div>

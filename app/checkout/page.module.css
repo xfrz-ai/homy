@@ -1,0 +1,210 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #ffffff;
+  padding-bottom: 90px;
+}
+
+.header {
+  padding: 24px 20px 16px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  border: 1px solid #1C2730;
+  background: white;
+  color: #1C2730;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1C2730;
+  padding: 0 20px;
+  margin-bottom: 24px;
+}
+
+.section {
+  padding: 0 20px 24px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 16px;
+}
+
+.detailBox {
+  background-color: #F8F9FA;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+}
+
+.imageBox {
+  width: 60px;
+  height: 60px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-right: 16px;
+}
+
+.itemImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 4px;
+}
+
+.itemPrice {
+  font-size: 13px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.itemQty {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+}
+
+.dashedLine {
+  border: none;
+  border-top: 1px dashed #D9D9D9;
+  margin: 16px 0;
+}
+
+.showMoreBtn {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #4A5568;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sectionDivider {
+  border: none;
+  border-top: 1px dashed #D9D9D9;
+  margin: 0 20px 24px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.rowGroup {
+  display: flex;
+  gap: 16px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 8px;
+}
+
+.input, .textarea {
+  border: 1px solid #E0E0E0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1C2730;
+  outline: none;
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: #A0A0A0;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.bottomBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #F0F0F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 24px;
+  z-index: 10;
+}
+
+.totalInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.totalLabel {
+  font-size: 13px;
+  color: #A0A0A0;
+  margin-bottom: 2px;
+}
+
+.totalPrice {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.payBtn {
+  background-color: #1C2730;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}

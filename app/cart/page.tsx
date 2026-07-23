@@ -104,7 +104,7 @@ export default function CartPage() {
                 <span className={styles.totalLabel}>Total Price</span>
                 <span className={styles.totalPrice}>{formatPrice(getTotalPrice())}</span>
               </div>
-              <button className={styles.checkoutBtn}>Continue Checkout</button>
+              <Link href="/checkout" className={styles.checkoutBtn} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Continue Checkout</Link>
             </div>
           </>
         )}
