@@ -1,0 +1,253 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.header {
+  padding: 24px 20px 16px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  border: 1px solid #1C2730;
+  background: white;
+  color: #1C2730;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1C2730;
+  padding: 0 20px;
+  margin-bottom: 24px;
+}
+
+.tabsContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 0 20px 16px;
+  scrollbar-width: none;
+}
+
+.tabsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: 1px solid #1C2730;
+  background: white;
+  color: #1C2730;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.tabActive {
+  background: #1C2730;
+  color: white;
+}
+
+.content {
+  padding: 0 20px 40px;
+}
+
+.orderCard {
+  display: block;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #E0E0E0;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.orderDate {
+  font-size: 13px;
+  color: #666666;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badgePending {
+  background-color: #F6F8A9;
+  color: #8C8400;
+}
+
+.badgeSuccess {
+  background-color: #D4EDDA;
+  color: #155724;
+}
+
+.badgeFailed {
+  background-color: #F8D7DA;
+  color: #721C24;
+}
+
+.paymentStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paymentLabel {
+  font-size: 13px;
+  color: #A0A0A0;
+}
+
+.paymentTime {
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #F6F8A9;
+  color: #8C8400;
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+.dashedLine {
+  border: none;
+  border-top: 1px dashed #D9D9D9;
+  margin: 16px 0;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+}
+
+.imageBox {
+  width: 60px;
+  height: 60px;
+  background-color: #F8F9FA;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-right: 16px;
+}
+
+.itemImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 4px;
+}
+
+.itemPrice {
+  font-size: 13px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.itemQty {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.otherProduct {
+  font-size: 13px;
+  color: #A0A0A0;
+  margin-top: 12px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalLabel {
+  font-size: 14px;
+  color: #666666;
+}
+
+.totalPrice {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.emptyImg {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 24px;
+}
+
+.emptyTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 12px;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.startShoppingBtn {
+  background-color: #1C2730;
+  color: white;
+  border-radius: 24px;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: inherit;
+}

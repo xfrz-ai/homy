@@ -1,0 +1,261 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+.header {
+  padding: 24px 20px 16px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  border: 1px solid #1C2730;
+  background: white;
+  color: #1C2730;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 24px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badgePending {
+  background-color: #F6F8A9;
+  color: #8C8400;
+}
+
+.section {
+  padding: 0 20px 16px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 16px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.infoLabel {
+  font-size: 13px;
+  color: #A0A0A0;
+}
+
+.infoValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1C2730;
+}
+
+.paymentBadge {
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #F6F8A9;
+  color: #8C8400;
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+.sectionDivider {
+  border: none;
+  border-top: 1px dashed #D9D9D9;
+  margin: 0 20px 24px;
+}
+
+.shippingBox {
+  background-color: #F8F9FA;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.shippingName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 8px;
+}
+
+.shippingAddress {
+  font-size: 13px;
+  color: #A0A0A0;
+  line-height: 1.5;
+}
+
+.itemCard {
+  display: flex;
+  align-items: center;
+  border: 1px solid #E0E0E0;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.imageBox {
+  width: 60px;
+  height: 60px;
+  background-color: #F8F9FA;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-right: 16px;
+}
+
+.itemImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C2730;
+  margin-bottom: 4px;
+}
+
+.itemPrice {
+  font-size: 13px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.itemQty {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.showMoreBtn {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #4A5568;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 8px 0;
+}
+
+.summarySection {
+  padding: 0 20px 24px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.summaryLabel {
+  font-size: 13px;
+  color: #666666;
+}
+
+.summaryValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1C2730;
+}
+
+.summaryValueRed {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FF4D4F;
+}
+
+.dashedLine {
+  border: none;
+  border-top: 1px dashed #D9D9D9;
+  margin: 16px 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.totalValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1C2730;
+}
+
+.bottomBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #F0F0F0;
+  padding: 16px 20px 24px;
+  z-index: 10;
+}
+
+.payBtn {
+  background-color: #1C2730;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  width: 100%;
+}

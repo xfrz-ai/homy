@@ -1,18 +1,52 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import styles from './page.module.css';
-import { getProductById } from '../../../lib/products';
+import { fetchProductById, type Product } from '../../../lib/products';
 import AddToCartBar from './AddToCartBar';
 import CartButton from '../../../components/CartButton';
 import WishlistButton from './WishlistButton';
+import { useParams } from 'next/navigation';
 
-export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const product = getProductById(id);
+export default function ProductDetail() {
+  const params = useParams();
+  const id = params.id as string;
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      fetchProductById(id).then((data) => {
+        setProduct(data);
+        setLoading(false);
+      });
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="mobile-wrapper">
+        <div className={styles.pageContainer}>
+          <div style={{ textAlign: 'center', padding: '80px 20px', color: '#A0A0A0' }}>Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
-    notFound();
+    return (
+      <div className="mobile-wrapper">
+        <div className={styles.pageContainer}>
+          <header className={styles.header}>
+            <Link href="/" className={styles.backBtn}>
+              <i className="ph ph-arrow-left"></i> Back
+            </Link>
+          </header>
+          <div style={{ textAlign: 'center', padding: '80px 20px', color: '#A0A0A0' }}>Product not found</div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -37,14 +71,16 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         </div>
 
         {/* 3D Model Viewer */}
-        <div className={styles.modelContainer}>
-          {React.createElement('model-viewer', {
-            src: product.glb,
-            'camera-controls': true,
-            'auto-rotate': true,
-            className: styles.modelViewer
-          })}
-        </div>
+        {product.glb && (
+          <div className={styles.modelContainer}>
+            {React.createElement('model-viewer', {
+              src: product.glb,
+              'camera-controls': true,
+              'auto-rotate': true,
+              className: styles.modelViewer
+            })}
+          </div>
+        )}
 
         {/* Description */}
         <div className={styles.descriptionSection}>

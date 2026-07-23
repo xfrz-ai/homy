@@ -2,12 +2,25 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 export default function CheckoutPage() {
-  const { cartItems, getTotalPrice } = useCart();
+  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Form state
+  const [fullName, setFullName] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [zipCode, setZipCode] = useState('');
 
   useEffect(() => {
     setMounted(true);
@@ -20,6 +33,70 @@ export default function CheckoutPage() {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(price).replace(/\s/g, '');
+  };
+
+  const parsePrice = (priceStr: string) => {
+    const cleaned = priceStr.replace(/Rp\s?/g, '').replace(/\./g, '');
+    return parseInt(cleaned, 10) || 0;
+  };
+
+  const handlePayNow = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    if (!fullName || !streetAddress || !city || !zipCode) {
+      setError('Please fill in all shipping information.');
+      return;
+    }
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      // 1. Create order
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          status: 'pending',
+          total_price: getTotalPrice(),
+          shipping_name: fullName,
+          shipping_address: streetAddress,
+          shipping_city: city,
+          shipping_zip: zipCode,
+        })
+        .select('id')
+        .single();
+
+      if (orderError) throw orderError;
+
+      // 2. Create order items
+      const orderItems = cartItems.map((item) => ({
+        order_id: orderData.id,
+        product_id: item.id,
+        product_name: item.name,
+        product_price: item.price,
+        product_image: item.image,
+        qty: item.qty,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
+
+      if (itemsError) throw itemsError;
+
+      // 3. Clear cart & redirect
+      clearCart();
+      router.push(`/orders/${orderData.id}`);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to place order';
+      setError(message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!mounted) return null;
@@ -38,6 +115,20 @@ export default function CheckoutPage() {
         </header>
 
         <h1 className={styles.pageTitle}>Checkout</h1>
+
+        {error && (
+          <div style={{ 
+            margin: '0 20px 16px', 
+            backgroundColor: '#FFF2F2', 
+            color: '#FF4D4F', 
+            padding: '12px 16px', 
+            borderRadius: '12px', 
+            fontSize: '13px',
+            textAlign: 'center'
+          }}>
+            {error}
+          </div>
+        )}
 
         {/* Detail Items */}
         <section className={styles.section}>
@@ -77,22 +168,22 @@ export default function CheckoutPage() {
           
           <div className={styles.formGroup}>
             <label className={styles.label}>Full Name</label>
-            <input type="text" className={styles.input} placeholder="Ex: Ucok Baba" />
+            <input type="text" className={styles.input} placeholder="Ex: Ucok Baba" value={fullName} onChange={(e) => setFullName(e.target.value)} />
           </div>
 
           <div className={styles.formGroup}>
             <label className={styles.label}>Street Address</label>
-            <textarea className={styles.textarea} placeholder="Ex: Jl. Jendral Sudirman No. 10"></textarea>
+            <textarea className={styles.textarea} placeholder="Ex: Jl. Jendral Sudirman No. 10" value={streetAddress} onChange={(e) => setStreetAddress(e.target.value)}></textarea>
           </div>
 
           <div className={styles.rowGroup}>
             <div className={styles.formGroup} style={{ flex: 1 }}>
               <label className={styles.label}>City</label>
-              <input type="text" className={styles.input} placeholder="Ex: Jakarta" />
+              <input type="text" className={styles.input} placeholder="Ex: Jakarta" value={city} onChange={(e) => setCity(e.target.value)} />
             </div>
             <div className={styles.formGroup} style={{ flex: 1 }}>
               <label className={styles.label}>Zip Code</label>
-              <input type="text" className={styles.input} placeholder="Ex: 10220" />
+              <input type="text" className={styles.input} placeholder="Ex: 10220" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
             </div>
           </div>
         </section>
@@ -103,7 +194,9 @@ export default function CheckoutPage() {
             <span className={styles.totalLabel}>Total Price</span>
             <span className={styles.totalPrice}>{formatPrice(getTotalPrice())}</span>
           </div>
-          <button className={styles.payBtn}>Pay Now</button>
+          <button className={styles.payBtn} onClick={handlePayNow} disabled={submitting}>
+            {submitting ? 'Processing...' : 'Pay Now'}
+          </button>
         </div>
       </div>
     </div>

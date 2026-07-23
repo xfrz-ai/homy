@@ -1,8 +1,20 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { products } from '../lib/products';
+import { fetchProducts, type Product } from '../lib/products';
+import BottomNav from '../components/BottomNav';
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts().then((data) => {
+      setProducts(data);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <div className="mobile-wrapper">
@@ -47,36 +59,25 @@ export default function Home() {
             <h3 className="products-title">Products</h3>
             <a href="#" className="see-all">See all</a>
           </div>
-          <div className="products-grid">
-            {products.map((product, index) => (
-              <Link href={`/product/${product.id}`} key={index} className="product-card" style={{ textDecoration: 'none' }}>
-                <div className="product-image-container">
-                  <img src={product.image} alt={product.name} className="product-image" />
-                </div>
-                <h4 className="product-name">{product.name}</h4>
-                <p className="product-price">{product.price}</p>
-              </Link>
-            ))}
-          </div>
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '40px 0', color: '#A0A0A0' }}>Loading products...</div>
+          ) : (
+            <div className="products-grid">
+              {products.map((product, index) => (
+                <Link href={`/product/${product.id}`} key={index} className="product-card" style={{ textDecoration: 'none' }}>
+                  <div className="product-image-container">
+                    <img src={product.image} alt={product.name} className="product-image" />
+                  </div>
+                  <h4 className="product-name">{product.name}</h4>
+                  <p className="product-price">{product.price}</p>
+                </Link>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
-      {/* Bottom Nav */}
-      <nav className="bottom-nav">
-        <a href="#" className="nav-item active">
-          <i className="ph ph-house"></i>
-          <span className="nav-label">Home</span>
-        </a>
-        <Link href="/cart" className="nav-item">
-          <i className="ph ph-shopping-cart"></i>
-        </Link>
-        <Link href="/wishlist" className="nav-item">
-          <i className="ph ph-heart"></i>
-        </Link>
-        <Link href="/profile" className="nav-item">
-          <i className="ph ph-user"></i>
-        </Link>
-      </nav>
+      <BottomNav activePage="home" />
     </div>
   );
 }

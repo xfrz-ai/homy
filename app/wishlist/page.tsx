@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
+import BottomNav from '../../components/BottomNav';
 
 export default function Wishlist() {
   const { wishlistItems, removeFromWishlist } = useWishlist();
@@ -77,22 +78,7 @@ export default function Wishlist() {
         )}
       </main>
 
-      {/* Bottom Nav */}
-      <nav className="bottom-nav">
-        <Link href="/" className="nav-item">
-          <i className="ph ph-house"></i>
-        </Link>
-        <Link href="/cart" className="nav-item">
-          <i className="ph ph-shopping-cart"></i>
-        </Link>
-        <Link href="/wishlist" className="nav-item active">
-          <i className="ph ph-heart"></i>
-          <span className="nav-label">Wishlist</span>
-        </Link>
-        <Link href="/profile" className="nav-item">
-          <i className="ph ph-user"></i>
-        </Link>
-      </nav>
+      <BottomNav activePage="wishlist" />
     </div>
   );
 }
