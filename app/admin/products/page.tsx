@@ -51,6 +51,16 @@ export default function AdminProducts() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const numericValue = e.target.value.replace(/\D/g, '');
+    if (!numericValue) {
+      setFormData(prev => ({ ...prev, price: '' }));
+      return;
+    }
+    const formatted = 'Rp ' + numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    setFormData(prev => ({ ...prev, price: formatted }));
+  };
+
   const openAddDialog = () => {
     setEditingProduct(null);
     setFormData({ id: '', name: '', price: '', image: '', glb: '', description: '' });
@@ -170,25 +180,13 @@ export default function AdminProducts() {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-4">
-                  {editingProduct && (
-                    <div className="space-y-1.5">
-                      <Label htmlFor="id" className="text-xs font-semibold text-slate-600">ID (Slug)</Label>
-                      <Input id="id" name="id" value={formData.id} onChange={handleInputChange} readOnly className="bg-slate-50 text-slate-500 border-slate-200 rounded-xl" />
-                    </div>
-                  )}
-                  {!editingProduct && (
-                    <div className="space-y-1.5">
-                      <Label htmlFor="id" className="text-xs font-semibold text-slate-600">ID (Optional - auto-generated)</Label>
-                      <Input id="id" name="id" value={formData.id} onChange={handleInputChange} placeholder="custom-id" className="border-slate-200 rounded-xl focus-visible:ring-purple-200" />
-                    </div>
-                  )}
                   <div className="space-y-1.5">
                     <Label htmlFor="name" className="text-xs font-semibold text-slate-600">Product Name</Label>
                     <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required placeholder="e.g. Modern Sofa" className="border-slate-200 rounded-xl focus-visible:ring-purple-200" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="price" className="text-xs font-semibold text-slate-600">Price (Text)</Label>
-                    <Input id="price" name="price" value={formData.price} onChange={handleInputChange} required placeholder="e.g. Rp 1.500.000" className="border-slate-200 rounded-xl focus-visible:ring-purple-200" />
+                    <Label htmlFor="price" className="text-xs font-semibold text-slate-600">Price</Label>
+                    <Input id="price" name="price" inputMode="numeric" value={formData.price} onChange={handlePriceChange} required placeholder="Rp 1.500.000" className="border-slate-200 rounded-xl focus-visible:ring-purple-200" />
                   </div>
                 </div>
 
