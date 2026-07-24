@@ -6,6 +6,23 @@ import { useParams } from 'next/navigation';
 import styles from './page.module.css';
 import { supabase } from '../../../lib/supabase';
 
+// Midtrans Snap type declaration
+declare global {
+  interface Window {
+    snap?: {
+      pay: (
+        token: string,
+        options: {
+          onSuccess?: (result: Record<string, unknown>) => void;
+          onPending?: (result: Record<string, unknown>) => void;
+          onError?: (result: Record<string, unknown>) => void;
+          onClose?: () => void;
+        }
+      ) => void;
+    };
+  }
+}
+
 interface OrderItem {
   id: number;
   product_id: string;
@@ -32,6 +49,8 @@ export default function OrderDetail() {
   const orderId = params.id as string;
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -65,7 +84,105 @@ export default function OrderDetail() {
     });
   };
 
+  const parsePrice = (priceStr: string) => {
+    const cleaned = priceStr.replace(/Rp\s?/g, '').replace(/\./g, '');
+    return parseInt(cleaned, 10) || 0;
+  };
+
   const getStatusLabel = (status: string) => status.charAt(0).toUpperCase() + status.slice(1);
+
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case 'paid':
+        return `${styles.badge} ${styles.badgePaid}`;
+      case 'pending':
+      default:
+        return `${styles.badge} ${styles.badgePending}`;
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'paid':
+        return 'ph-fill ph-check-circle';
+      case 'pending':
+      default:
+        return 'ph-fill ph-clock';
+    }
+  };
+
+  const getPaymentBadgeClass = (status: string) => {
+    switch (status) {
+      case 'paid':
+        return styles.paymentBadgePaid;
+      case 'pending':
+      default:
+        return styles.paymentBadge;
+    }
+  };
+
+  const handleRetryPayment = async () => {
+    if (!order) return;
+
+    setPaying(true);
+    setPayError(null);
+
+    try {
+      // Build items for Midtrans
+      const midtransItems = order.order_items.map((item) => ({
+        name: item.product_name,
+        price: parsePrice(item.product_price),
+        qty: item.qty,
+      }));
+
+      const snapResponse = await fetch('/api/midtrans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id: order.id,
+          gross_amount: order.total_price,
+          customer_name: order.shipping_name,
+          items: midtransItems,
+        }),
+      });
+
+      const snapData = await snapResponse.json();
+
+      if (!snapResponse.ok) {
+        throw new Error(snapData.error || 'Failed to create payment');
+      }
+
+      if (!window.snap) {
+        throw new Error('Payment system is loading. Please try again.');
+      }
+
+      window.snap.pay(snapData.snap_token, {
+        onSuccess: async () => {
+          await supabase
+            .from('orders')
+            .update({ status: 'paid' })
+            .eq('id', order.id);
+
+          setOrder({ ...order, status: 'paid' });
+          setPaying(false);
+        },
+        onPending: () => {
+          setPaying(false);
+        },
+        onError: () => {
+          setPayError('Payment failed. Please try again.');
+          setPaying(false);
+        },
+        onClose: () => {
+          setPaying(false);
+        },
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Payment failed';
+      setPayError(message);
+      setPaying(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -107,8 +224,8 @@ export default function OrderDetail() {
 
         <div className={styles.titleRow}>
           <h1 className={styles.pageTitle}>Detail Order</h1>
-          <span className={`${styles.badge} ${styles.badgePending}`}>
-            <i className="ph-fill ph-clock"></i> {getStatusLabel(order.status)}
+          <span className={getStatusBadgeClass(order.status)}>
+            <i className={getStatusIcon(order.status)}></i> {getStatusLabel(order.status)}
           </span>
         </div>
 
@@ -125,7 +242,7 @@ export default function OrderDetail() {
           </div>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>Payment Status</span>
-            <span className={styles.paymentBadge}>{getStatusLabel(order.status)}</span>
+            <span className={getPaymentBadgeClass(order.status)}>{getStatusLabel(order.status)}</span>
           </div>
         </section>
 
@@ -188,10 +305,26 @@ export default function OrderDetail() {
           </div>
         </section>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar - Pay Now for pending orders */}
         {order.status === 'pending' && (
           <div className={styles.bottomBar}>
-            <button className={styles.payBtn}>Pay Now</button>
+            {payError && (
+              <div style={{
+                width: '100%',
+                backgroundColor: '#FFF2F2',
+                color: '#FF4D4F',
+                padding: '10px 16px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                textAlign: 'center',
+                marginBottom: '12px',
+              }}>
+                {payError}
+              </div>
+            )}
+            <button className={styles.payBtn} onClick={handleRetryPayment} disabled={paying}>
+              {paying ? 'Processing...' : 'Pay Now'}
+            </button>
           </div>
         )}
       </div>

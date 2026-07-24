@@ -31,6 +31,11 @@ export default function RootLayout({
         </AuthProvider>
         <Script src="https://unpkg.com/@phosphor-icons/web" strategy="lazyOnload" />
         <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js" strategy="lazyOnload" />
+        <Script
+          src="https://app.sandbox.midtrans.com/snap/snap.js"
+          data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

@@ -8,6 +8,23 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 
+// Midtrans Snap type declaration
+declare global {
+  interface Window {
+    snap?: {
+      pay: (
+        token: string,
+        options: {
+          onSuccess?: (result: Record<string, unknown>) => void;
+          onPending?: (result: Record<string, unknown>) => void;
+          onError?: (result: Record<string, unknown>) => void;
+          onClose?: () => void;
+        }
+      ) => void;
+    };
+  }
+}
+
 export default function CheckoutPage() {
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const { user } = useAuth();
@@ -51,11 +68,16 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (cartItems.length === 0) {
+      setError('Your cart is empty.');
+      return;
+    }
+
     setSubmitting(true);
     setError(null);
 
     try {
-      // 1. Create order
+      // 1. Create order in Supabase (status: pending)
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
@@ -88,13 +110,64 @@ export default function CheckoutPage() {
 
       if (itemsError) throw itemsError;
 
-      // 3. Clear cart & redirect
-      clearCart();
-      router.push(`/orders/${orderData.id}`);
+      // 3. Get Snap token from our API
+      const midtransItems = cartItems.map((item) => ({
+        name: item.name,
+        price: parsePrice(item.price),
+        qty: item.qty,
+      }));
+
+      const snapResponse = await fetch('/api/midtrans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id: orderData.id,
+          gross_amount: getTotalPrice(),
+          customer_name: fullName,
+          customer_email: user.email,
+          items: midtransItems,
+        }),
+      });
+
+      const snapData = await snapResponse.json();
+
+      if (!snapResponse.ok) {
+        throw new Error(snapData.error || 'Failed to create payment');
+      }
+
+      // 4. Open Midtrans Snap popup
+      if (!window.snap) {
+        throw new Error('Payment system is loading. Please try again.');
+      }
+
+      window.snap.pay(snapData.snap_token, {
+        onSuccess: async () => {
+          // Update order status to paid
+          await supabase
+            .from('orders')
+            .update({ status: 'paid' })
+            .eq('id', orderData.id);
+
+          clearCart();
+          router.push(`/orders/${orderData.id}`);
+        },
+        onPending: () => {
+          // Order stays pending, redirect to order detail
+          clearCart();
+          router.push(`/orders/${orderData.id}`);
+        },
+        onError: () => {
+          setError('Payment failed. You can retry from your order details.');
+          setSubmitting(false);
+        },
+        onClose: () => {
+          setError('Payment cancelled. You can retry from your order details.');
+          setSubmitting(false);
+        },
+      });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to place order';
       setError(message);
-    } finally {
       setSubmitting(false);
     }
   };
