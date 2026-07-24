@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabase';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table';
 
 interface Order {
   id: number;
@@ -64,45 +63,53 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Orders</h1>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-[28px] font-bold tracking-tight text-slate-900 leading-none mb-2">Orders Management</h1>
+          <p className="text-sm text-slate-500">Manage and track customer orders</p>
+        </div>
       </div>
 
-      <div className="rounded-[2rem] bg-white p-6 md:p-8 shadow-sm overflow-hidden">
-        <Table>
-          <TableHeader className="bg-slate-50/80">
-            <TableRow>
-              <TableHead className="w-[100px] font-semibold text-slate-700">ID</TableHead>
-              <TableHead className="font-semibold text-slate-700">Customer</TableHead>
-              <TableHead className="font-semibold text-slate-700">Date</TableHead>
-              <TableHead className="font-semibold text-slate-700">Total</TableHead>
-              <TableHead className="font-semibold text-slate-700">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center h-24 text-slate-500">Loading orders...</TableCell>
-              </TableRow>
-            ) : orders.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center h-24 text-slate-500">No orders found.</TableCell>
-              </TableRow>
-            ) : (
-              orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">#{order.id}</TableCell>
-                  <TableCell>{order.shipping_name}</TableCell>
-                  <TableCell>{formatDate(order.created_at)}</TableCell>
-                  <TableCell>{formatPrice(order.total_price)}</TableCell>
-                  <TableCell>
-                    {getStatusBadge(order.status)}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+      <div className="rounded-[2rem] bg-white p-6 md:p-8 shadow-sm">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-bold text-slate-900">All Orders List</h2>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-slate-100 text-slate-500">
+                <th className="pb-4 font-medium px-4">ID</th>
+                <th className="pb-4 font-medium px-4">Customer</th>
+                <th className="pb-4 font-medium px-4">Date</th>
+                <th className="pb-4 font-medium px-4">Total</th>
+                <th className="pb-4 font-medium px-4">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-12 text-slate-500">Loading orders...</td>
+                </tr>
+              ) : orders.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-12 text-slate-500">No orders found.</td>
+                </tr>
+              ) : (
+                orders.map((order) => (
+                  <tr key={order.id} className="border-b border-slate-50/80 hover:bg-slate-50/50 transition-colors group">
+                    <td className="py-4 px-4 font-semibold text-slate-900">#{order.id}</td>
+                    <td className="py-4 px-4 font-medium text-slate-700">{order.shipping_name}</td>
+                    <td className="py-4 px-4 font-medium text-slate-700">{formatDate(order.created_at)}</td>
+                    <td className="py-4 px-4 font-medium text-slate-700">{formatPrice(order.total_price)}</td>
+                    <td className="py-4 px-4">
+                      {getStatusBadge(order.status)}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

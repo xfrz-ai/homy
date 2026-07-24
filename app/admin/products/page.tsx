@@ -173,7 +173,7 @@ export default function AdminProducts() {
               <Plus className="mr-2 h-4 w-4" /> Add Product
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[550px] bg-white rounded-[2rem] p-6 shadow-xl border-0">
+          <DialogContent className="w-[95vw] sm:max-w-[550px] max-h-[90vh] overflow-y-auto overflow-x-hidden bg-white rounded-[2rem] p-6 shadow-xl border-0">
             <DialogHeader className="mb-4">
               <DialogTitle className="text-xl font-bold text-slate-900">{editingProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
             </DialogHeader>
@@ -190,7 +190,7 @@ export default function AdminProducts() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 min-w-0">
                   <div className="space-y-1.5">
                     <Label htmlFor="imageFile" className="text-xs font-semibold text-slate-600">Upload Product Image</Label>
                     <Input 
@@ -203,10 +203,10 @@ export default function AdminProducts() {
                           setFormData(prev => ({ ...prev, image: URL.createObjectURL(e.target.files![0]) }));
                         }
                       }} 
-                      className="border-slate-200 rounded-xl focus-visible:ring-purple-200 text-xs file:bg-slate-50 file:text-slate-700 file:border-0 file:rounded-full file:px-3 file:py-1 file:mr-2 file:text-xs file:font-medium hover:file:bg-slate-100 cursor-pointer h-10" 
+                      className="w-full border-slate-200 rounded-xl focus-visible:ring-purple-200 text-xs file:bg-slate-50 file:text-slate-700 file:border-0 file:rounded-full file:px-3 file:py-1 file:mr-2 file:text-xs file:font-medium hover:file:bg-slate-100 cursor-pointer h-10" 
                     />
                     {!imageFile && formData.image && (
-                      <p className="text-[10px] text-slate-400 mt-1 truncate">Current: {formData.image}</p>
+                      <p className="text-[10px] text-slate-400 mt-1 break-all">Current: {formData.image}</p>
                     )}
                   </div>
                   {/* Image Preview */}
@@ -231,10 +231,10 @@ export default function AdminProducts() {
                       setGlbFile(e.target.files[0]);
                     }
                   }} 
-                  className="border-slate-200 rounded-xl focus-visible:ring-purple-200 text-xs file:bg-slate-50 file:text-slate-700 file:border-0 file:rounded-full file:px-3 file:py-1 file:mr-2 file:text-xs file:font-medium hover:file:bg-slate-100 cursor-pointer h-10" 
+                  className="w-full border-slate-200 rounded-xl focus-visible:ring-purple-200 text-xs file:bg-slate-50 file:text-slate-700 file:border-0 file:rounded-full file:px-3 file:py-1 file:mr-2 file:text-xs file:font-medium hover:file:bg-slate-100 cursor-pointer h-10" 
                 />
                 {!glbFile && formData.glb && (
-                  <p className="text-[10px] text-slate-400 mt-1 truncate">Current: {formData.glb}</p>
+                  <p className="text-[10px] text-slate-400 mt-1 break-all">Current: {formData.glb}</p>
                 )}
               </div>
               <div className="space-y-1.5">
@@ -272,27 +272,21 @@ export default function AdminProducts() {
             <thead>
               <tr className="border-b border-slate-100 text-slate-500">
                 <th className="pb-4 font-medium px-4">Product Name</th>
-                <th className="pb-4 font-medium px-4">Status</th>
                 <th className="pb-4 font-medium px-4">Price</th>
-                <th className="pb-4 font-medium px-4">Customer Rating</th>
                 <th className="pb-4 font-medium px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-slate-500">Loading products...</td>
+                  <td colSpan={3} className="text-center py-12 text-slate-500">Loading products...</td>
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-slate-500">No products found.</td>
+                  <td colSpan={3} className="text-center py-12 text-slate-500">No products found.</td>
                 </tr>
               ) : (
-                products.map((product, index) => {
-                  // Mock logic for status and rating based on index
-                  const isStockOk = index % 3 !== 0;
-                  const rating = 4.5 + (index % 5) * 0.1;
-                  
+                products.map((product) => {
                   return (
                     <tr key={product.id} className="border-b border-slate-50/80 hover:bg-slate-50/50 transition-colors group">
                       <td className="py-4 px-4">
@@ -302,30 +296,14 @@ export default function AdminProducts() {
                           </div>
                           <div>
                             <p className="font-semibold text-slate-900">{product.name}</p>
-                            <p className="text-[11px] text-slate-500">Furniture & Decor</p>
                           </div>
                         </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        {isStockOk ? (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-pink-100 text-pink-600">Stock OK</span>
-                        ) : (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-[#e9e1fa] text-[#7c3aed]">Reorder</span>
-                        )}
                       </td>
                       <td className="py-4 px-4 font-medium text-slate-700">
                         {product.price}
                       </td>
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill={i < Math.floor(rating) ? "#facc15" : "none"} stroke={i < Math.floor(rating) ? "#facc15" : "#cbd5e1"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                          ))}
-                          <span className="text-xs text-slate-500 font-medium ml-1">({rating.toFixed(1)})</span>
-                        </div>
-                      </td>
                       <td className="py-4 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-end gap-2">
                           <button onClick={() => openEditDialog(product)} className="p-2 text-slate-400 hover:text-slate-900 bg-white rounded-full shadow-sm border border-slate-100 hover:border-slate-200 transition-all">
                             <Pencil className="h-3.5 w-3.5" />
                           </button>

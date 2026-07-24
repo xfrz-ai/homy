@@ -20,16 +20,21 @@ import {
 import { cn } from '../../lib/utils';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading, signOut } = useAuth();
+  const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
 
   React.useEffect(() => {
-    if (!loading && !user && pathname !== '/admin/login') {
+    if (loading) return;
+
+    if (!user && pathname !== '/admin/login') {
       router.push('/admin/login');
+    } else if (user && profile && profile.role !== 'admin' && pathname !== '/admin/login') {
+      alert("Akses ditolak. Hanya admin yang dapat mengakses halaman ini.");
+      signOut().then(() => router.push('/admin/login'));
     }
-  }, [user, loading, router, pathname]);
+  }, [user, profile, loading, router, pathname, signOut]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center bg-[#f4f2ee]">Loading...</div>;

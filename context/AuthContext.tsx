@@ -9,6 +9,7 @@ interface Profile {
   full_name: string | null;
   email: string | null;
   avatar_url: string | null;
+  role: string | null;
 }
 
 interface AuthContextType {
@@ -44,11 +45,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        await fetchProfile(session.user.id);
       }
       setLoading(false);
     });
