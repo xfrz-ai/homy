@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { products } from "../lib/products";
+
 
 export interface WishlistItem {
   id: string;
